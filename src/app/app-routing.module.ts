@@ -1,16 +1,25 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './guard/auth.guard';
+import { autoLoginGuard } from './guard/auto-login.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'mahasiswa',
-    pathMatch: 'full'
+    path: 'mahasiswa',
+    loadChildren: () => import ('./mahasiswa/mahasiswa.module'). then (m => m.MahasiswaPageModule),
+    canActivate: [authGuard]
   },
   {
-    path: 'mahasiswa',
-    loadChildren: () => import('./mahasiswa/mahasiswa.module').then(m => m.MahasiswaPageModule)
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+   
   },
+  {
+  path: 'login',
+  loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),
+  canActivate: [autoLoginGuard]
+},
 ];
 
 @NgModule({
